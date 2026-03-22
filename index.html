@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KGP QRcode - Générateur de QR Codes avec Logo</title>
+    <link rel="icon" type="image/x-icon" href="favi.ico">
+
+    <style>
+        /* --- Reset & Base Styles --- */
+        :root {
+            --primary-color: #3b82f6; /* K-GOU Blue */
+            --primary-hover: #2563eb; 
+            --dark-bg: #09090b;
+            --dark-panel: #121214;
+            --dark-border: #27272a;
+            --dark-text: #e2e8f0;
+            --dark-text-secondary: #94a3b8;
+            --accent-color: #a855f7; /* App Icon Purple */
+            --accent-hover: #9333ea;
+            --success-color: #22c55e;
+            --error-color: #ef4444;
+            --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        img { max-width: 100%; height: auto; display: block; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: var(--font-sans); background-color: var(--dark-bg); color: var(--dark-text); line-height: 1.6; font-size: 16px;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        section { padding: 80px 0; }
+        .section-header { text-align: center; margin-bottom: 60px; }
+        .section-header h2 { font-size: 2.5rem; font-weight: 800; margin-bottom: 1rem; }
+        .section-header p { font-size: 1.1rem; color: var(--dark-text-secondary); max-width: 700px; margin: 0 auto; }
+
+        /* --- Header --- */
+        .main-header { padding: 15px 0; position: sticky; top: 0; background-color: rgba(9, 9, 11, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); z-index: 100; border-bottom: 1px solid var(--dark-border); }
+        .main-header .container { display: flex; justify-content: space-between; align-items: center; }
+        .logo-container { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        .app-icon-small { width: 35px; height: auto; border-radius: 8px; box-shadow: 0 0 10px rgba(168, 85, 247, 0.4); }
+        .logo-text { font-size: 1.5rem; font-weight: 700; color: white; }
+        .logo-text span { color: var(--accent-color); }
+        .main-nav a { margin-left: 30px; color: var(--dark-text-secondary); text-decoration: none; transition: color 0.3s; font-weight: 500;}
+        .main-nav a:hover { color: white; }
+
+        /* --- Hero Section --- */
+        .hero { 
+            position: relative; text-align: center; padding: 120px 0 80px; 
+            background-image: linear-gradient(to bottom, rgba(9, 9, 11, 0.5), rgba(9, 9, 11, 1)), url('bg-stone1.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            border-bottom: 1px solid var(--dark-border);
+        }
+        .hero-content { display: flex; flex-direction: column; align-items: center; }
+        .badge-free { background: rgba(34, 197, 94, 0.1); color: var(--success-color); border: 1px solid rgba(34, 197, 94, 0.2); padding: 6px 16px; border-radius: 20px; font-size: 0.9rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 25px; display: inline-flex; align-items: center; gap: 8px;}
+        .hero h1 { font-size: 3.5rem; font-weight: 800; line-height: 1.1; margin-bottom: 1.5rem; color: white; }
+        .hero h1 span { color: var(--accent-color); }
+        .hero p { font-size: 1.2rem; color: var(--dark-text-secondary); margin-bottom: 2.5rem; max-width: 650px; }
+        
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; padding: 16px 36px; border-radius: 8px; font-size: 1.1rem; font-weight: 600; text-decoration: none; transition: all 0.3s; border: 2px solid transparent; }
+        .btn-primary { background-color: var(--accent-color); color: white; box-shadow: 0 0 20px rgba(168, 85, 247, 0.3); }
+        .btn-primary:hover { background-color: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 10px 30px rgba(168, 85, 247, 0.5); }
+
+        /* --- App Mockup --- */
+        .hero-mockup {
+            margin-top: 60px; max-width: 900px; width: 100%;
+            background: var(--dark-panel); border: 1px solid var(--dark-border); border-radius: 12px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 30px rgba(59, 130, 246, 0.1);
+            position: relative; overflow: hidden;
+        }
+        .hero-mockup::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--primary-color), transparent); opacity: 0.5; z-index: 10; }
+        .hero-mockup img { width: 100%; height: auto; display: block; }
+
+        /* --- Features Grid --- */
+        #features { background-color: var(--dark-bg); }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .feature-card { background-color: var(--dark-panel); padding: 30px; border-radius: 12px; border: 1px solid var(--dark-border); transition: transform 0.3s; }
+        .feature-card:hover { transform: translateY(-5px); border-color: var(--accent-color); }
+        .feature-card .icon { display: inline-flex; background-color: rgba(168, 85, 247, 0.1); color: var(--accent-color); padding: 14px; border-radius: 10px; margin-bottom: 20px; }
+        .feature-card h3 { font-size: 1.3rem; margin-bottom: 12px; color: white;}
+        .feature-card p { color: var(--dark-text-secondary); }
+
+        /* --- How it Works (Visual Steps) --- */
+        #how-it-works { background-color: var(--dark-panel); border-top: 1px solid var(--dark-border); border-bottom: 1px solid var(--dark-border); }
+        .steps-container { display: flex; flex-direction: column; gap: 40px; max-width: 800px; margin: 0 auto; }
+        .step-row { display: flex; align-items: center; gap: 30px; background: var(--dark-bg); padding: 25px; border-radius: 16px; border: 1px solid var(--dark-border); }
+        .step-number { flex-shrink: 0; width: 60px; height: 60px; border-radius: 50%; background: rgba(59, 130, 246, 0.1); color: var(--primary-color); border: 2px solid var(--primary-color); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 800; box-shadow: 0 0 15px rgba(59, 130, 246, 0.3); }
+        .step-text h3 { color: white; margin-bottom: 8px; font-size: 1.2rem; }
+        .step-text p { color: var(--dark-text-secondary); margin: 0; }
+
+        /* --- Footer --- */
+        .main-footer { padding: 40px 0 20px; background-color: #050505; text-align: center; color: var(--dark-text-secondary); }
+        .studio-logo { width: 120px; margin: 0 auto 20px auto; filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.3)); }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .step-row { flex-direction: column; text-align: center; }
+            .main-nav { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="container">
+            <a href="#" class="logo-container">
+                <img src="favi.ico" alt="KGP QRcode" class="app-icon-small">
+                <div class="logo-text">KGP <span>QRcode</span></div>
+            </a>
+            <nav class="main-nav">
+                <a href="#features">Fonctionnalités</a>
+                <a href="#how-it-works">Comment ça marche</a>
+                <a href="https://github.com/votre-lien-de-telechargement" class="btn btn-primary" style="padding: 8px 20px; font-size: 0.9rem; margin-left: 20px;">Télécharger gratuit</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- ========== HERO SECTION ========== -->
+        <section class="hero">
+            <div class="container hero-content">
+                <div class="badge-free">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                    Outil 100% Gratuit
+                </div>
+                
+                <h1>Générez des QR Codes <br><span>à votre image</span>.</h1>
+                <p>Créez vos propres QR Codes en quelques clics. Choisissez vos couleurs, ajustez vos bordures sur-mesure, <strong>insérez votre logo au centre</strong> et exportez instantanément. Sans inscription, sans abonnement.</p>
+                
+                <a href="https://github.com/votre-lien-de-telechargement" class="btn btn-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Télécharger KGP QRcode (.exe)
+                </a>
+                <p style="font-size: 0.85rem; color: #64748b; margin-top: 15px;">Pour Windows • Aucune installation requise</p>
+
+                <!-- Dashboard Mockup -->
+                <div class="hero-mockup">
+                    <img src="dash.png" alt="Interface de KGP QRcode">
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== FEATURES SECTION ========== -->
+        <section id="features">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Pourquoi utiliser KGP <span style="color: var(--accent-hover);">QRcode</span> ?</h2>
+                    <p>Démarquez-vous des QR Codes en noir et blanc classiques. Personnalisez vos codes à l'image de votre marque ou de vos envies, directement depuis votre PC.</p>
+                </div>
+                <div class="features-grid">
+                    
+                    <div class="feature-card">
+                        <div class="icon">
+                            <!-- Icône Insertion Image/Logo -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                        </div>
+                        <h3>Intégration de Logo</h3>
+                        <p>Ajoutez la touche ultime : insérez votre propre image ou le logo de votre entreprise en plein centre de votre QR code sans affecter sa lisibilité par les smartphones.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="icon">
+                            <!-- Icône Palette de couleurs -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a10 10 0 1 1 0-20 10 10 0 0 1 0 20z"></path><path d="M12 12a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"></path><path d="M19 12a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"></path><path d="M5 12a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"></path></svg>
+                        </div>
+                        <h3>Personnalisation Totale</h3>
+                        <p>Ajustez chaque détail visuel : couleur de fond, couleur des motifs du QR code, couleur de la bordure et même l'épaisseur exacte de la bordure en pixels.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="icon">
+                            <!-- Icône QR Code minimaliste -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                        </div>
+                        <h3>Format Universel</h3>
+                        <p>Saisissez n'importe quelle donnée : un lien de site web (URL), un profil réseau social, un texte brut, un numéro de téléphone ou un accès Wi-Fi.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="icon">
+                            <!-- Icône Standalone -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                        </div>
+                        <h3>100% Portable (Stand-alone)</h3>
+                        <p>C'est un simple fichier <code>.exe</code>. Pas besoin d'installation, pas de droits administrateur. Mettez-le sur votre clé USB et créez vos QR Codes partout.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="icon">
+                            <!-- Icône Sécurité locale -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                        </div>
+                        <h3>Génération 100% Hors-ligne</h3>
+                        <p>Contrairement aux générateurs web qui trackent vos liens, tout est calculé localement sur votre machine. Vos données privées ne sont jamais envoyées sur internet.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="icon">
+                            <!-- Icône Cadeau / Développeur -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"></polyline><rect x="2" y="7" width="20" height="5"></rect><line x1="12" y1="22" x2="12" y2="7"></line><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg>
+                        </div>
+                        <h3>Le Mot du Développeur</h3>
+                        <p>J'en avais assez des sites générateurs remplis de publicités ou nécessitant un compte payant pour ajouter de la couleur et un logo. KGP QRcode est ma solution, offerte gratuitement.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== HOW IT WORKS ========== -->
+        <section id="how-it-works">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Comment ça marche ?</h2>
+                    <p>Obtenez votre QR Code sur-mesure en 3 étapes extrêmement simples.</p>
+                </div>
+                
+                <div class="steps-container">
+                    <div class="step-row">
+                        <div class="step-number">1</div>
+                        <div class="step-text">
+                            <h3>Entrez votre contenu</h3>
+                            <p>Ouvrez l'application et tapez ou collez le texte que vous souhaitez encoder (l'adresse de votre site web, vos coordonnées, le menu de votre restaurant, etc.).</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step-row">
+                        <div class="step-number">2</div>
+                        <div class="step-text">
+                            <h3>Personnalisez le design & le Logo</h3>
+                            <p>Jouez avec les options pour rendre votre code unique : choisissez vos couleurs, définissez l'épaisseur de la bordure, et surtout, <strong>importez votre logo (PNG/JPG) pour qu'il s'affiche fièrement au centre</strong> de votre création.</p>
+                        </div>
+                    </div>
+
+                    <div class="step-row">
+                        <div class="step-number">3</div>
+                        <div class="step-text">
+                            <h3>Générez et sauvegardez</h3>
+                            <p>Cliquez sur le bouton de génération. Votre QR Code personnalisé est prêt instantanément ! Vous n'avez plus qu'à l'exporter en image pour l'utiliser sur vos cartes de visite, flyers ou réseaux sociaux.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <a href="index.html"><img src="logo-kgou.png" alt="K-GOU PROD" class="studio-logo"></a>
+            <p>&copy; 2026 Un outil gratuit offert par <strong>K-GOU PROD</strong>.</p>
+            <p style="font-size: 0.9rem; margin-top: 10px;">Découvrez également notre logiciel <a href="https://k-gou09.github.io/KGP_Compta/index.html" style="color: var(--accent-color); text-decoration: none;">KGP Compta</a>.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
